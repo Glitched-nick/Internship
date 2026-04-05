@@ -81,17 +81,24 @@ def _build_feedback(result: EvaluationResult) -> list[str]:
 def _print_result(result: EvaluationResult) -> None:
     badge = STRENGTH_BADGE[result.strength]
 
-    print(f"\n  Strength  :  {badge}")
-    print(f"  Entropy   :  {_entropy_bar(result.entropy_bits)}")
-    print(f"  Charset   :  {result.charset_size} possible characters")
-    print(f"  Score     :  {result.score}/5 criteria met\n")
+    # ── 1. Strength ──────────────────────────────────────────
+    print(f"\n  ┌─ STRENGTH {'─' * 37}")
+    print(f"  │  {badge}  ({result.score}/5 criteria met)")
+    print(f"  └{'─' * 48}")
 
-    print("  Rule Checklist:")
-    print(_format_rules(result))
+    # ── 2. Entropy ───────────────────────────────────────────
+    print(f"\n  ┌─ ENTROPY {'─' * 38}")
+    print(f"  │  {_entropy_bar(result.entropy_bits)}")
+    print(f"  │  Charset pool : {result.charset_size} characters")
+    print(f"  │  Label        : {result.entropy_label}")
+    print(f"  └{'─' * 48}")
 
-    print("\n  Recommendations:")
-    for tip in _build_feedback(result):
-        print(f"    • {tip}")
+    # ── 3. Suggestions ───────────────────────────────────────
+    tips = _build_feedback(result)
+    print(f"\n  ┌─ SUGGESTIONS {'─' * 34}")
+    for tip in tips:
+        print(f"  │  • {tip}")
+    print(f"  └{'─' * 48}")
 
 # ---------------------------------------------------------------------------
 # Entry point
